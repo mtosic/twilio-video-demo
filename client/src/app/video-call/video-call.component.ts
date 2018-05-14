@@ -3,7 +3,6 @@ import * as TwilioVideo from 'twilio-video';
 import { TwilioService } from '../twilio.service';
 
 
-
 @Component({
   selector: 'app-video-call',
   templateUrl: './video-call.component.html',
@@ -15,37 +14,38 @@ export class VideoCallComponent implements OnInit {
   error: Error;
   room: TwilioVideo.Room;
   username: string;
+  roomParticipants: string[] = [];
 
   constructor(private twilioService: TwilioService) { }
 
   ngOnInit() {
     //this.connectToRoom();
+    TwilioVideo.createLocalVideoTrack().then(track => {
+      var localMediaContainer = document.getElementById('local-media-div');
+      localMediaContainer.appendChild(track.attach());
+    });
   }
 
-  connect(token:string) {
+  connect(token: string) {
     TwilioVideo.connect(token, { name: 'okomo-test1', audio: true, video: { width: 640 }, type: 'peer-to-peer' }).then(room => {
       console.log('Connected to Room:', room);
-      console.log('Connected to Room:', room.name);
+      this.room = room;
 
       // Log your Client's LocalParticipant in the Room
       const localParticipant = room.localParticipant;
       console.log('Connected to the Room as LocalParticipant "%s"', localParticipant.identity);
+      this.roomParticipants.push(localParticipant.identity);
 
       // Log any Participants already connected to the Room
       room.participants.forEach(participant => {
         console.log('Participant "%s" is connected to the Room', participant.identity);
+        this.roomParticipants.push(participant.identity);
       });
 
       // Log new Participants as they connect to the Room
       room.once('participantConnected', participant => {
         console.log('Participant "%s" has connected to the Room', participant.identity);
-        participant.tracks.forEach(track => {
-          document.getElementById('remote-media-div').appendChild(track.attach());
-        });
-      
-        participant.on('trackAdded', track => {
-          document.getElementById('remote-media-div').appendChild(track.attach());
-        });
+        this.roomParticipants.push(participant.identity);
       });
 
       // Log Participants as they disconnect from the Room
@@ -59,12 +59,32 @@ export class VideoCallComponent implements OnInit {
 
   }
 
-  connectToRoom(username:string): void {
+  connectToRoom(username: string): void {
     this.twilioService.getToken(username)
-      .subscribe(token =>  { 
+      .subscribe(token => {
         this.token = token;
+        console.log('Token: "%s"', token.token)
         this.connect(token.token);
       });
+  }
+
+  callParticipant(participantIdentity: string) {
+    this.room.participants.forEach(participant => {
+      if (participant.identity == participantIdentity) {
+        let roomParticipant = participant;
+        console.log(roomParticipant);
+        let element = document.getElementById('remote-media-div');
+        while (element.firstChild) {
+          element.removeChild(element.firstChild);
+        }
+
+        roomParticipant.tracks.forEach(track => {
+          element.appendChild(track.attach());
+        });
+
+      }
+    });
+
   }
 
 }

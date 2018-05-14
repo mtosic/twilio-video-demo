@@ -1,25 +1,41 @@
-<!-- <pre *ngIf="error"><code>{{error.stack}}</code></pre>
-<p *ngIf="!error && !room">Connecting to a new Room&hellip;</p>
-<p *ngIf="room && room.state === 'disconnected'">Disconnected from Room {{room.sid}}.</p>
-<p *ngIf="room && room.state !== 'disconnected'">Connected to Room {{room.sid}}.</p> -->
-
-<p *ngIf="token">Token identity: {{token.identity}}.</p>
-<p *ngIf="token">Token: {{token.token}}.</p>
-
-<div>
-    <label>name:
-        <input [(ngModel)]="username" placeholder="username">
-    </label>
-</div>
-<button (click)="connectToRoom(username)">Connect to room</button>
-<div id="remote-media-div"></div>
-
-<form class="example-form">
-    <mat-form-field class="example-full-width">
-      <input matInput placeholder="Favorite food" value="Sushi">
-    </mat-form-field>
+<mat-grid-list cols="4" rowHeight="320px">
+  <mat-grid-tile>
+    <mat-grid-tile-header>Join room</mat-grid-tile-header>
+    <form class="example-form">
+      <mat-form-field class="example-full-width">
+        <input matInput name="username" [(ngModel)]="username" placeholder="Username">
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="connectToRoom(username)">Connect to room</button>
+    </form>
+  </mat-grid-tile>
   
-    <mat-form-field class="example-full-width">
-      <textarea matInput placeholder="Leave a comment"></textarea>
-    </mat-form-field>
-  </form>
+  <mat-grid-tile colspan=2>
+    <mat-grid-tile-header>Room participants</mat-grid-tile-header>
+    <mat-radio-group *ngIf="room" class="example-radio-group" [(ngModel)]="selectedParticipant">
+      <mat-radio-button class="example-radio-button" *ngFor="let participant of roomParticipants" [value]="participant">
+        {{participant}}
+      </mat-radio-button>
+    </mat-radio-group>
+    <button *ngIf="selectedParticipant" mat-raised-button color="primary" (click)="callParticipant(selectedParticipant)" [disabled]="username==selectedParticipant">Call: {{selectedParticipant}}</button>
+  </mat-grid-tile>
+  
+  <mat-grid-tile>
+      <mat-grid-tile-header>Room info</mat-grid-tile-header>
+      <mat-list *ngIf="room">
+          <mat-list-item> Name: {{room.name}} </mat-list-item>
+          <mat-list-item> SID: {{room.sid}} </mat-list-item>
+          <mat-list-item> Identity: {{token.identity}} </mat-list-item>
+      </mat-list>
+  </mat-grid-tile>
+  
+  <mat-grid-tile colspan="2" rowspan="2">
+    <mat-grid-tile-header>Local media</mat-grid-tile-header>
+    <div id="local-media-div"></div>
+  </mat-grid-tile>
+  
+  <mat-grid-tile colspan="2" rowspan="2">
+    <mat-grid-tile-header>Remote media</mat-grid-tile-header>
+    <div id="remote-media-div"></div>
+  </mat-grid-tile>
+
+</mat-grid-list>

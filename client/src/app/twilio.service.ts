@@ -18,7 +18,7 @@ export class TwilioService {
   getToken(username: string): Observable<TwilioToken> {
     const url = `${this.serverUrl}/token/${username}`;
     return this.http.get<TwilioToken>(url).pipe(
-      tap(_ => console.log(`fetched token for =${username}`)),
+      tap(_ => console.log(`fetched token for: ${username}`)),
       catchError(this.handleError<TwilioToken>(`getToken username=${username}`))
     );
   }

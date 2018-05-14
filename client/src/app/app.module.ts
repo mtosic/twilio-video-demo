@@ -4,7 +4,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { MatFormFieldModule, MatInputModule } from '@angular/material';
+import { MatFormFieldModule, MatInputModule, MatButtonModule, MatGridListModule, MatCardModule, MatRadioModule, MatListModule } from '@angular/material';
 
 
 import { AppComponent } from './app.component';
@@ -21,7 +21,7 @@ import { TwilioService } from './twilio.service';
     BrowserModule,
     HttpClientModule,
     FormsModule,
-    MatFormFieldModule, MatInputModule,
+    MatFormFieldModule, MatInputModule, MatButtonModule, MatGridListModule, MatCardModule, MatRadioModule, MatListModule,
     BrowserAnimationsModule
   ],
   providers: [TwilioService],
