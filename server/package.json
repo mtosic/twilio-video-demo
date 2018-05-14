@@ -1,0 +1,17 @@
+{
+  "name": "okomo-server",
+  "version": "1.0.0",
+  "description": "okomo server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Marko Tosic",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "dotenv": "^5.0.1",
+    "express": "^4.16.3",
+    "twilio": "^3.17.0"
+  }
+}

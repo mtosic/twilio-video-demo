@@ -1,0 +1,25 @@
+<!-- <pre *ngIf="error"><code>{{error.stack}}</code></pre>
+<p *ngIf="!error && !room">Connecting to a new Room&hellip;</p>
+<p *ngIf="room && room.state === 'disconnected'">Disconnected from Room {{room.sid}}.</p>
+<p *ngIf="room && room.state !== 'disconnected'">Connected to Room {{room.sid}}.</p> -->
+
+<p *ngIf="token">Token identity: {{token.identity}}.</p>
+<p *ngIf="token">Token: {{token.token}}.</p>
+
+<div>
+    <label>name:
+        <input [(ngModel)]="username" placeholder="username">
+    </label>
+</div>
+<button (click)="connectToRoom(username)">Connect to room</button>
+<div id="remote-media-div"></div>
+
+<form class="example-form">
+    <mat-form-field class="example-full-width">
+      <input matInput placeholder="Favorite food" value="Sushi">
+    </mat-form-field>
+  
+    <mat-form-field class="example-full-width">
+      <textarea matInput placeholder="Leave a comment"></textarea>
+    </mat-form-field>
+  </form>
